@@ -1,13 +1,12 @@
-// import { lambdaHandler as boltGoogleCloudStorageOpsClientHandler } from "./BoltGoogleCloudStorageOpsClientHandler";
-// import { lambdaHandler as boltGoogleCloudStorageValidateObjHandler } from "./BoltGoogleCloudStorageValidateObjHandler.ts";
-// import { lambdaHandler as boltAutoHealHandler } from "./BoltAutoHealHandler.ts";
-// import { lambdaHandler as boltGoogleCloudStoragePerfHandler } from "./BoltGoogleCloudStoragePerfHandler.ts";
-// export const BoltGoogleCloudStorageOpsClientHandler = boltGoogleCloudStorageOpsClientHandler;
-// export const BoltGoogleCloudStorageValidateObjHandler = boltGoogleCloudStorageValidateObjHandler;
-// export const BoltAutoHealHandler = boltAutoHealHandler;
-// export const BoltGoogleCloudStoragePerfHandler = boltGoogleCloudStoragePerfHandler;
-// exports.BoltGoogleCloudStorageOpsClientHandler = boltGoogleCloudStorageOpsClientHandler;
-// exports.BoltGoogleCloudStorageValidateObjHandler = boltGoogleCloudStorageValidateObjHandler;
-// exports.BoltAutoHealHandler = boltAutoHealHandler;
-// exports.BoltGoogleCloudStoragePerfHandler = boltGoogleCloudStoragePerfHandler;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BoltGoogleCloudStorageOpsClientGCF_1 = require("./BoltGoogleCloudStorageOpsClientGCF");
+const BoltGoogleCloudStorageValidateObjGCF_1 = require("./BoltGoogleCloudStorageValidateObjGCF");
+const BoltAutoHealTestGCF_1 = require("./BoltAutoHealTestGCF");
+const BoltGoogleCloudStoragePerfTestGCF_1 = require("./BoltGoogleCloudStoragePerfTestGCF");
+exports.BoltGoogleCloudStorageOpsClient = BoltGoogleCloudStorageOpsClientGCF_1.googleCloudFunctionHandler;
+exports.BoltGoogleCloudStorageValidateObj =
+    BoltGoogleCloudStorageValidateObjGCF_1.googleCloudFunctionHandler;
+exports.BoltAutoHealTest = BoltAutoHealTestGCF_1.googleCloudFunctionHandler;
+exports.BoltGoogleCloudStoragePerfTest = BoltGoogleCloudStoragePerfTestGCF_1.googleCloudFunctionHandler;
 //# sourceMappingURL=index.js.map

@@ -20,7 +20,7 @@ import {
  * <returns>md5s of object retrieved from Bolt and GoogleCloudStorage.</returns>
  */
 
-exports.BoltGoogleCloudStorageValidateObj = async (req, res) => {
+export async function googleCloudFunctionHandler(req, res) {
   const event: GoogleCloudFunctionEvent = req.body;
   const opsClient = new BoltGoogleCloudStorageOpsClient();
   const boltGetObjectResponse = await opsClient.processEvent({
@@ -37,4 +37,4 @@ exports.BoltGoogleCloudStorageValidateObj = async (req, res) => {
     "gcs-md5": GoogleCloudStorageGetObjectResponse["md5"],
     "bolt-md5": boltGetObjectResponse["md5"],
   });
-};
+}

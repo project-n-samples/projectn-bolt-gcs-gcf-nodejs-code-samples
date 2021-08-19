@@ -48,9 +48,9 @@ g) Delete object from Bolt:
     {"requestType": "delete_object", "sdkType": "BOLT", "bucket": "<bucket>", "key": "<key>"}
 */
 
-exports.BoltGoogleCloudStorageOpsClient = async (req, res) => {
+export async function googleCloudFunctionHandler(req, res) {
   const event: GoogleCloudFunctionEvent = req.body;
   const opsClient = new BoltGoogleCloudStorageOpsClient();
   const response = await opsClient.processEvent(event);
   res.send(response);
-};
+}

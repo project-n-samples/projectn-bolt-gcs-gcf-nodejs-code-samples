@@ -1,14 +1,10 @@
-// import { lambdaHandler as boltGoogleCloudStorageOpsClientHandler } from "./BoltGoogleCloudStorageOpsClientHandler";
-// import { lambdaHandler as boltGoogleCloudStorageValidateObjHandler } from "./BoltGoogleCloudStorageValidateObjHandler.ts";
-// import { lambdaHandler as boltAutoHealHandler } from "./BoltAutoHealHandler.ts";
-// import { lambdaHandler as boltGoogleCloudStoragePerfHandler } from "./BoltGoogleCloudStoragePerfHandler.ts";
+import { googleCloudFunctionHandler as boltGoogleCloudStorageOpsClientGCF } from "./BoltGoogleCloudStorageOpsClientGCF";
+import { googleCloudFunctionHandler as boltGoogleCloudStorageValidateObjGCF } from "./BoltGoogleCloudStorageValidateObjGCF";
+import { googleCloudFunctionHandler as boltAutoHealTestGCF } from "./BoltAutoHealTestGCF";
+import { googleCloudFunctionHandler as boltGoogleCloudStoragePerfTestGCF } from "./BoltGoogleCloudStoragePerfTestGCF";
 
-// export const BoltGoogleCloudStorageOpsClientHandler = boltGoogleCloudStorageOpsClientHandler;
-// export const BoltGoogleCloudStorageValidateObjHandler = boltGoogleCloudStorageValidateObjHandler;
-// export const BoltAutoHealHandler = boltAutoHealHandler;
-// export const BoltGoogleCloudStoragePerfHandler = boltGoogleCloudStoragePerfHandler;
-
-// exports.BoltGoogleCloudStorageOpsClientHandler = boltGoogleCloudStorageOpsClientHandler;
-// exports.BoltGoogleCloudStorageValidateObjHandler = boltGoogleCloudStorageValidateObjHandler;
-// exports.BoltAutoHealHandler = boltAutoHealHandler;
-// exports.BoltGoogleCloudStoragePerfHandler = boltGoogleCloudStoragePerfHandler;
+exports.BoltGoogleCloudStorageOpsClient = boltGoogleCloudStorageOpsClientGCF;
+exports.BoltGoogleCloudStorageValidateObj =
+  boltGoogleCloudStorageValidateObjGCF;
+exports.BoltAutoHealTest = boltAutoHealTestGCF;
+exports.BoltGoogleCloudStoragePerfTest = boltGoogleCloudStoragePerfTestGCF;
