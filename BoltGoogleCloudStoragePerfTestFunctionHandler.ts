@@ -44,7 +44,7 @@ const perf = require("execution-time")();
  * <param name="context">lambda context</param>
  * <re>response from BoltGoogleCloudStoragePerf</r
  *  */
-exports.BoltGoogleCloudStoragePerf = async (req, res) => {
+exports.BoltGoogleCloudStoragePerfTest = async (req, res) => {
   const event: GoogleCloudFunctionEvent = req.body;
   const getPerfStats = async (requestType: RequestType) => {
     const maxKeys = event.maxKeys

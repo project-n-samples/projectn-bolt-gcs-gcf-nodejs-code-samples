@@ -18,7 +18,8 @@ const perf = require("execution-time")();
  * <param name="context">lambda context</param>
  * <returns>time taken to auto-heal</returns>
  */
-export async function lambdaHandler(event: GoogleCloudFunctionEvent, context, callback) {
+exports.BoltAutoHealTest = async (req, res) => {
+  const event: GoogleCloudFunctionEvent = req.body;
   const WAIT_TIME_BETWEEN_RETRIES = 2000; //ms
   const wait = (ms) => {
     return new Promise((resolve) => {
@@ -44,15 +45,10 @@ export async function lambdaHandler(event: GoogleCloudFunctionEvent, context, ca
     }
   }
   const results = perf.stop();
-  return new Promise((res, rej) => {
-    callback(undefined, {
-      auto_heal_time: `${(results.time > WAIT_TIME_BETWEEN_RETRIES
-        ? results.time - WAIT_TIME_BETWEEN_RETRIES
-        : results.time
-      ).toFixed(2)} ms`,
-    });
-    res("success");
+  res.send({
+    auto_heal_time: `${(results.time > WAIT_TIME_BETWEEN_RETRIES
+      ? results.time - WAIT_TIME_BETWEEN_RETRIES
+      : results.time
+    ).toFixed(2)} ms`,
   });
-}
-
-exports.lambdaHandler = lambdaHandler;
+};
