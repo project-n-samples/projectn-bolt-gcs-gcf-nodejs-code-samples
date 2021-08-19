@@ -48,7 +48,7 @@ const perf = require("execution-time")();
  * <param name="context">lambda context</param>
  * <re>response from BoltGoogleCloudStoragePerf</r
  *  */
-exports.BoltGoogleCloudStoragePerf = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.BoltGoogleCloudStoragePerfTest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const event = req.body;
     const getPerfStats = (requestType) => __awaiter(void 0, void 0, void 0, function* () {
         const maxKeys = event.maxKeys
@@ -153,4 +153,4 @@ function computePerfStats(opTimes, tpTimes = [], objSizes = []) {
             ? stats(tpTimes, 5, "objects/ms")
             : `${(opTimes.length / sum(opTimes)).toFixed(5)} objects/ms` }, (objSizes.length > 0 ? { objectSize: stats(objSizes, 2, "bytes") } : {}));
 }
-//# sourceMappingURL=BoltGoogleCloudStoragePerfFunctionHandler.js.map
+//# sourceMappingURL=BoltGoogleCloudStoragePerfTestFunctionHandler.js.map
