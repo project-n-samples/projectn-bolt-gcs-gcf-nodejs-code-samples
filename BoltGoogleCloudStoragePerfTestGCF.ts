@@ -44,7 +44,7 @@ const perf = require("execution-time")();
  * <param name="context">lambda context</param>
  * <re>response from BoltGoogleCloudStoragePerf</r
  *  */
-exports.BoltGoogleCloudStoragePerfTest = async (req, res) => {
+export async function googleCloudFunctionHandler(req, res) {
   const event: GoogleCloudFunctionEvent = req.body;
   const getPerfStats = async (requestType: RequestType) => {
     const maxKeys = event.maxKeys
@@ -71,7 +71,7 @@ exports.BoltGoogleCloudStoragePerfTest = async (req, res) => {
           )
         ? new Array(maxKeys)
             .fill(0)
-            .map((x, i) => `bolt-GoogleCloudStorage-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
+            .map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
         : (
             (
               await opsClient.processEvent({
@@ -164,7 +164,7 @@ exports.BoltGoogleCloudStoragePerfTest = async (req, res) => {
           [RequestType.GetObject]: await getPerfStats(RequestType.GetObject),
         };
   res.send(perfStats);
-};
+}
 
 /**
  * @param opTimes array of latencies

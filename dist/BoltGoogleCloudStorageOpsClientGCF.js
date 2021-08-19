@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.googleCloudFunctionHandler = void 0;
 const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
 // TODO: Update the below code comments
 /**
@@ -54,10 +55,13 @@ f) Upload object to Bolt:
 g) Delete object from Bolt:
     {"requestType": "delete_object", "sdkType": "BOLT", "bucket": "<bucket>", "key": "<key>"}
 */
-exports.BoltGoogleCloudStorageOpsClient = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const event = req.body;
-    const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
-    const response = yield opsClient.processEvent(event);
-    res.send(response);
-});
-//# sourceMappingURL=BoltGoogleCloudStorageOpsClientFunctionHandler.js.map
+function googleCloudFunctionHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const event = req.body;
+        const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+        const response = yield opsClient.processEvent(event);
+        res.send(response);
+    });
+}
+exports.googleCloudFunctionHandler = googleCloudFunctionHandler;
+//# sourceMappingURL=BoltGoogleCloudStorageOpsClientGCF.js.map
