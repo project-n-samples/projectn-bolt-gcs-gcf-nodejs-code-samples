@@ -108,7 +108,7 @@ class BoltGoogleCloudStorageOpsClient {
              * request is sent to GoogleCloudStorage if 'sdkType' is not passed as a parameter in the event.
              * create an Bolt/GoogleCloudStorage Client depending on the 'sdkType'
              */
-            console.log("before client instantiation....typescript support");
+            console.log("before client instantiation....");
             const region = yield getBoltRegion();
             console.log({ region });
             const client = event.sdkType === SdkTypes.Bolt
@@ -119,12 +119,14 @@ class BoltGoogleCloudStorageOpsClient {
                 //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'
                 switch (event.requestType) {
                     case RequestType.ListObjects:
-                        return this.listObjects(client, event.bucket, event.maxKeys);
+                        return this.listObjects(client, event.bucket);
                     case RequestType.GetObject:
                     case RequestType.GetObjectTTFB:
                     case RequestType.GetObjectPassthrough:
                     case RequestType.GetObjectPassthroughTTFB:
-                        return this.getObject(client, event.bucket, event.key, event.isForStats, [
+                        return this.getObject(client, event.bucket, event.key, event.isForStats
+                            ? event.isForStats === "true" || event.isForStats === true
+                            : false, [
                             RequestType.GetObjectTTFB,
                             RequestType.GetObjectPassthroughTTFB,
                         ].includes(event.requestType));
@@ -254,7 +256,7 @@ class BoltGoogleCloudStorageOpsClient {
                 lastModified: objectMetadata.updated
                     ? new Date(objectMetadata.updated).toISOString()
                     : "",
-                contentLength: objectMetadata.size,
+                contentLength: objectMetadata.size ? parseInt(objectMetadata.size) : 0,
                 contentEncoding: objectMetadata.contentEncoding,
                 eTag: objectMetadata.etag,
                 storageClass: objectMetadata.storageClass,
@@ -357,7 +359,12 @@ class BoltGoogleCloudStorageOpsClient {
                 : yield this.streamToString(readStream, timeToFirstByte);
             const md5 = createHash("md5").update(data).digest("hex").toUpperCase();
             const additional = isForStats
-                ? { contentLength: objectMetadata.size, isObjectCompressed }
+                ? {
+                    contentLength: objectMetadata.size
+                        ? parseInt(objectMetadata.size)
+                        : 0,
+                    isObjectCompressed,
+                }
                 : {};
             return Object.assign({ md5 }, additional);
         });
