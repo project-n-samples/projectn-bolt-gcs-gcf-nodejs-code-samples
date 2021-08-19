@@ -2,7 +2,7 @@ import {
   BoltGoogleCloudStorageOpsClient,
   SdkTypes,
   RequestType,
-  LambdaEvent,
+  GoogleCloudFunctionEvent,
   GetObjectResponse,
   ListObjectsResponse,
 } from "./BoltGoogleCloudStorageOpsClient";
@@ -44,15 +44,18 @@ const perf = require("execution-time")();
  * <param name="context">lambda context</param>
  * <re>response from BoltGoogleCloudStoragePerf</r
  *  */
-export async function lambdaHandler(event: LambdaEvent, context, callback) {
+exports.BoltGoogleCloudStoragePerf = async (req, res) => {
+  const event: GoogleCloudFunctionEvent = req.body;
   const getPerfStats = async (requestType: RequestType) => {
     const maxKeys = event.maxKeys
-      ? event.maxKeys <= 1000
-        ? event.maxKeys
+      ? parseInt(event.maxKeys as string) <= 1000
+        ? parseInt(event.maxKeys as string)
         : 1000
       : 1000;
     const generateRandomValue = () =>
-      new Array(event.maxObjLength ? event.maxObjLength : 100)
+      new Array(
+        event.maxObjLength ? parseInt(event.maxObjLength as string) : 100
+      )
         .fill(0)
         .map((x, i) =>
           String.fromCharCode(Math.floor(Math.random() * (122 - 48)) + 48)
@@ -66,7 +69,9 @@ export async function lambdaHandler(event: LambdaEvent, context, callback) {
         : [RequestType.UploadObject, RequestType.DeleteObject].includes(
             requestType
           )
-        ? new Array(maxKeys).fill(0).map((x, i) => `bolt-GoogleCloudStorage-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
+        ? new Array(maxKeys)
+            .fill(0)
+            .map((x, i) => `bolt-GoogleCloudStorage-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
         : (
             (
               await opsClient.processEvent({
@@ -158,12 +163,8 @@ export async function lambdaHandler(event: LambdaEvent, context, callback) {
           ),
           [RequestType.GetObject]: await getPerfStats(RequestType.GetObject),
         };
-
-  return new Promise((res, rej) => {
-    callback(undefined, perfStats);
-    res("success");
-  });
-}
+  res.send(perfStats);
+};
 
 /**
  * @param opTimes array of latencies
@@ -209,5 +210,3 @@ function computePerfStats(
     ...(objSizes.length > 0 ? { objectSize: stats(objSizes, 2, "bytes") } : {}),
   };
 }
-
-exports.lambdaHandler = lambdaHandler;

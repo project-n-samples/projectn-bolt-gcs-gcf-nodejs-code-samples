@@ -2,7 +2,7 @@ import {
   BoltGoogleCloudStorageOpsClient,
   SdkTypes,
   RequestType,
-  LambdaEvent,
+  GoogleCloudFunctionEvent,
 } from "./BoltGoogleCloudStorageOpsClient";
 
 /**
@@ -20,19 +20,20 @@ import {
  * <returns>md5s of object retrieved from Bolt and GoogleCloudStorage.</returns>
  */
 
-exports.BoltGoogleCloudStoragValidateObj = async (req, res) => {
+exports.BoltGoogleCloudStorageValidateObj = async (req, res) => {
+  const event: GoogleCloudFunctionEvent = req.body;
   const opsClient = new BoltGoogleCloudStorageOpsClient();
   const boltGetObjectResponse = await opsClient.processEvent({
-    ...req.body,
+    ...event,
     requestType: RequestType.GetObject,
     sdkType: SdkTypes.Bolt,
   });
   const GoogleCloudStorageGetObjectResponse = await opsClient.processEvent({
-    ...req.body,
+    ...event,
     requestType: RequestType.GetObject,
     sdkType: SdkTypes.GCS,
   });
-  return res.send({
+  res.send({
     "gcs-md5": GoogleCloudStorageGetObjectResponse["md5"],
     "bolt-md5": boltGetObjectResponse["md5"],
   });

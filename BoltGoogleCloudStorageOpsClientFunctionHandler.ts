@@ -1,4 +1,7 @@
-import { BoltGoogleCloudStorageOpsClient } from "./BoltGoogleCloudStorageOpsClient";
+import {
+  BoltGoogleCloudStorageOpsClient,
+  GoogleCloudFunctionEvent,
+} from "./BoltGoogleCloudStorageOpsClient";
 
 // TODO: Update the below code comments
 /**
@@ -46,7 +49,8 @@ g) Delete object from Bolt:
 */
 
 exports.BoltGoogleCloudStorageOpsClient = async (req, res) => {
+  const event: GoogleCloudFunctionEvent = req.body;
   const opsClient = new BoltGoogleCloudStorageOpsClient();
-  const response = await opsClient.processEvent(req.body);
+  const response = await opsClient.processEvent(event);
   res.send(response);
 };
