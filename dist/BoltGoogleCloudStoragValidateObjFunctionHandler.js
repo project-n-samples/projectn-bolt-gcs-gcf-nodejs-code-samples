@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lambdaHandler = void 0;
 const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
 /**
  * <summary>
@@ -25,22 +24,13 @@ const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsCl
  * <param name="context">lambda context</param>
  * <returns>md5s of object retrieved from Bolt and GoogleCloudStorage.</returns>
  */
-function lambdaHandler(event, context, callback) {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield (() => __awaiter(this, void 0, void 0, function* () {
-            const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
-            const boltGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
-            const GoogleCloudStorageGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.GCS }));
-            return new Promise((res, rej) => {
-                callback(undefined, {
-                    "GoogleCloudStorage-md5": GoogleCloudStorageGetObjectResponse["md5"],
-                    "bolt-md5": boltGetObjectResponse["md5"],
-                });
-                res("success");
-            });
-        }))();
+exports.BoltGoogleCloudStoragValidateObj = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+    const boltGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, req.body), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
+    const GoogleCloudStorageGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, req.body), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.GCS }));
+    return res.send({
+        "gcs-md5": GoogleCloudStorageGetObjectResponse["md5"],
+        "bolt-md5": boltGetObjectResponse["md5"],
     });
-}
-exports.lambdaHandler = lambdaHandler;
-exports.lambdaHandler = lambdaHandler;
+});
 //# sourceMappingURL=BoltGoogleCloudStoragValidateObjFunctionHandler.js.map

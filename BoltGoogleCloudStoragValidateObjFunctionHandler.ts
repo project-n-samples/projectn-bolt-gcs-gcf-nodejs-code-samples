@@ -19,27 +19,21 @@ import {
  * <param name="context">lambda context</param>
  * <returns>md5s of object retrieved from Bolt and GoogleCloudStorage.</returns>
  */
-export async function lambdaHandler(event: LambdaEvent, context, callback) {
-  await (async () => {
-    const opsClient = new BoltGoogleCloudStorageOpsClient();
-    const boltGetObjectResponse = await opsClient.processEvent({
-      ...event,
-      requestType: RequestType.GetObject,
-      sdkType: SdkTypes.Bolt,
-    });
-    const GoogleCloudStorageGetObjectResponse = await opsClient.processEvent({
-      ...event,
-      requestType: RequestType.GetObject,
-      sdkType: SdkTypes.GCS,
-    });
-    return new Promise((res, rej) => {
-      callback(undefined, {
-        "GoogleCloudStorage-md5": GoogleCloudStorageGetObjectResponse["md5"],
-        "bolt-md5": boltGetObjectResponse["md5"],
-      });
-      res("success");
-    });
-  })();
-}
 
-exports.lambdaHandler = lambdaHandler;
+exports.BoltGoogleCloudStoragValidateObj = async (req, res) => {
+  const opsClient = new BoltGoogleCloudStorageOpsClient();
+  const boltGetObjectResponse = await opsClient.processEvent({
+    ...req.body,
+    requestType: RequestType.GetObject,
+    sdkType: SdkTypes.Bolt,
+  });
+  const GoogleCloudStorageGetObjectResponse = await opsClient.processEvent({
+    ...req.body,
+    requestType: RequestType.GetObject,
+    sdkType: SdkTypes.GCS,
+  });
+  return res.send({
+    "gcs-md5": GoogleCloudStorageGetObjectResponse["md5"],
+    "bolt-md5": boltGetObjectResponse["md5"],
+  });
+};
