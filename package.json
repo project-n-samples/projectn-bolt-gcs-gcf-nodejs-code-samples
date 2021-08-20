@@ -1,6 +1,6 @@
 {
   "name": "projectn-bolt-nodejs-lambda-sample",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-beta.1",
   "description": "Sample AWS Lambda app in Node.js that utilizes Bolt TypeScript Client SDK",
   "main": "dist/index.js",
   "files": [
@@ -18,10 +18,10 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/debug-agent": "^5.0.0",
-    "@google-cloud/storage": "^5.0.0",
+    "@google-cloud/storage": "^5.3.0",
+    "axios": "^0.21.1",
     "escape-html": "^1.0.3",
-    "execution-time": "^1.4.1",
-    "axios": "^0.21.1"
+    "execution-time": "^1.4.1"
   },
   "devDependencies": {
     "@types/node": "^15.12.4",
