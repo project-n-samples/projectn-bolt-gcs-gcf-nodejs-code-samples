@@ -5,7 +5,7 @@ import {
   GoogleCloudFunctionEvent,
   GetObjectResponse,
   ListObjectsResponse,
-} from "./boltGoogleCloudStorageOpsClient";
+} from "./boltGoogleCloudStorageOpsClient_";
 const perf = require("execution-time")();
 /**
  * <summary>
