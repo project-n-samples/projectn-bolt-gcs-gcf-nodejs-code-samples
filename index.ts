@@ -3,8 +3,7 @@ import { googleCloudFunctionHandler as boltGoogleCloudStorageValidateObjGCF } fr
 import { googleCloudFunctionHandler as boltAutoHealTestGCF } from "./boltAutoHealTestGCF";
 import { googleCloudFunctionHandler as boltGoogleCloudStoragePerfTestGCF } from "./boltGoogleCloudStoragePerfTestGCF";
 
-exports.BoltGoogleCloudStorageOpsClient = boltGoogleCloudStorageOpsClientGCF;
-exports.BoltGoogleCloudStorageValidateObj =
-  boltGoogleCloudStorageValidateObjGCF;
-exports.BoltAutoHealTest = boltAutoHealTestGCF;
-exports.BoltGoogleCloudStoragePerfTest = boltGoogleCloudStoragePerfTestGCF;
+exports.boltGcsOpsClientGcfEntry = boltGoogleCloudStorageOpsClientGCF;
+exports.boltGcsValidateObjGcfEntry = boltGoogleCloudStorageValidateObjGCF;
+exports.boltGcsPerfTestGcfEntry = boltGoogleCloudStoragePerfTestGCF;
+exports.boltAutoHealTestGcfEntry = boltAutoHealTestGCF;
