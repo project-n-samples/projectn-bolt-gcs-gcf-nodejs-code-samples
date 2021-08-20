@@ -108,13 +108,10 @@ class BoltGoogleCloudStorageOpsClient {
              * request is sent to GoogleCloudStorage if 'sdkType' is not passed as a parameter in the event.
              * create an Bolt/GoogleCloudStorage Client depending on the 'sdkType'
              */
-            console.log("before client instantiation....");
             const region = yield getBoltRegion();
-            console.log({ region });
             const client = event.sdkType === SdkTypes.Bolt
                 ? new storage_1.Storage({ apiEndpoint: getBoltURL(region).toString() })
                 : new storage_1.Storage();
-            console.log("after client instantiation....");
             try {
                 //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'
                 switch (event.requestType) {
@@ -135,7 +132,7 @@ class BoltGoogleCloudStorageOpsClient {
                     case RequestType.GetBucketMetadata:
                         return this.getBucketMetadata(client, event.bucket);
                     case RequestType.GetObjectMetadata:
-                        return this.GetObjectMetadata(client, event.bucket, event.key);
+                        return this.getObjectMetadata(client, event.bucket, event.key);
                     case RequestType.UploadObject:
                         return this.uploadObject(client, event.bucket, event.key, event.value);
                     case RequestType.DownloadObject:
@@ -238,7 +235,7 @@ class BoltGoogleCloudStorageOpsClient {
      * @param key
      * @returns object metadata
      */
-    GetObjectMetadata(client, bucket, key) {
+    getObjectMetadata(client, bucket, key) {
         return __awaiter(this, void 0, void 0, function* () {
             const [objectMetadata] = (yield client
                 .bucket(bucket)
@@ -270,11 +267,8 @@ class BoltGoogleCloudStorageOpsClient {
      */
     listBuckets(client) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("came to list buckets....");
-            const response = yield client.getBuckets();
-            console.log("after getBuckets called...", { response });
-            const [buckets] = response;
-            return { buckets: (buckets || []).map((x) => x.name) };
+            const [buckets] = (yield client.getBuckets()) || [[]];
+            return { buckets: buckets.map((x) => x.name) };
         });
     }
     /**
@@ -308,7 +302,6 @@ class BoltGoogleCloudStorageOpsClient {
     uploadObject(client, bucket, key, value) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield client.bucket(bucket).file(key);
-            console.log("before Readable");
             yield new Promise((resolve, reject) => {
                 stream_1.Readable.from(value).pipe(file
                     .createWriteStream({
@@ -319,15 +312,12 @@ class BoltGoogleCloudStorageOpsClient {
                     },
                 })
                     .on("error", (error) => {
-                    console.log("error", error);
                     reject(error);
                 })
                     .on("finish", () => {
-                    console.log("done");
                     resolve(true);
                 }));
             });
-            console.log("after Readable");
             const [objectMetadata] = (yield client
                 .bucket(bucket)
                 .file(key)

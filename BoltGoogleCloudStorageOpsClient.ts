@@ -173,14 +173,11 @@ export class BoltGoogleCloudStorageOpsClient
      * request is sent to GoogleCloudStorage if 'sdkType' is not passed as a parameter in the event.
      * create an Bolt/GoogleCloudStorage Client depending on the 'sdkType'
      */
-    console.log("before client instantiation....");
     const region = await getBoltRegion();
-    console.log({ region });
     const client =
       event.sdkType === SdkTypes.Bolt
         ? new Storage({ apiEndpoint: getBoltURL(region).toString() })
         : new Storage();
-    console.log("after client instantiation....");
     try {
       //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'
 
@@ -208,7 +205,7 @@ export class BoltGoogleCloudStorageOpsClient
         case RequestType.GetBucketMetadata:
           return this.getBucketMetadata(client, event.bucket);
         case RequestType.GetObjectMetadata:
-          return this.GetObjectMetadata(client, event.bucket, event.key);
+          return this.getObjectMetadata(client, event.bucket, event.key);
         case RequestType.UploadObject:
           return this.uploadObject(
             client,
@@ -327,7 +324,7 @@ export class BoltGoogleCloudStorageOpsClient
    * @param key
    * @returns object metadata
    */
-  async GetObjectMetadata(
+  async getObjectMetadata(
     client: Storage,
     bucket: string,
     key: string
@@ -361,11 +358,8 @@ export class BoltGoogleCloudStorageOpsClient
    * @returns list of buckets
    */
   async listBuckets(client: Storage): Promise<ListBucketsResponse> {
-    console.log("came to list buckets....");
-    const response = await client.getBuckets();
-    console.log("after getBuckets called...", { response });
-    const [buckets] = response;
-    return { buckets: (buckets || []).map((x) => x.name) };
+    const [buckets] = (await client.getBuckets()) || [[]];
+    return { buckets: buckets.map((x) => x.name) };
   }
 
   /**
@@ -405,7 +399,6 @@ export class BoltGoogleCloudStorageOpsClient
     value: string
   ): Promise<UploadObjectResponse> {
     const file = await client.bucket(bucket).file(key);
-    console.log("before Readable");
     await new Promise((resolve, reject) => {
       Readable.from(value).pipe(
         file
@@ -417,16 +410,13 @@ export class BoltGoogleCloudStorageOpsClient
             },
           })
           .on("error", (error) => {
-            console.log("error", error);
             reject(error);
           })
           .on("finish", () => {
-            console.log("done");
             resolve(true);
           })
       );
     });
-    console.log("after Readable");
 
     const [objectMetadata] = (await client
       .bucket(bucket)
