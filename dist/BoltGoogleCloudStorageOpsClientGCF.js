@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.googleCloudFunctionHandler = void 0;
-const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
+const boltGoogleCloudStorageOpsClient_1 = require("./boltGoogleCloudStorageOpsClient");
 // TODO: Update the below code comments
 /**
  *lambda_handler is the handler function that is invoked by AWS Lambda to process an incoming event.
@@ -58,10 +58,10 @@ g) Delete object from Bolt:
 function googleCloudFunctionHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const event = req.body;
-        const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+        const opsClient = new boltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
         const response = yield opsClient.processEvent(event);
         res.send(response);
     });
 }
 exports.googleCloudFunctionHandler = googleCloudFunctionHandler;
-//# sourceMappingURL=BoltGoogleCloudStorageOpsClientGCF.js.map
+//# sourceMappingURL=boltGoogleCloudStorageOpsClientGCF.js.map

@@ -3,7 +3,7 @@ import {
   SdkTypes,
   RequestType,
   GoogleCloudFunctionEvent,
-} from "./BoltGoogleCloudStorageOpsClient";
+} from "./boltGoogleCloudStorageOpsClient";
 const perf = require("execution-time")();
 
 /**

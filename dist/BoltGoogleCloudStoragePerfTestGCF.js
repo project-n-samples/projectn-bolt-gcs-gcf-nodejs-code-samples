@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.googleCloudFunctionHandler = void 0;
-const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
+const boltGoogleCloudStorageOpsClient_1 = require("./boltGoogleCloudStorageOpsClient");
 const perf = require("execution-time")();
 /**
  * <summary>
@@ -62,14 +62,14 @@ function googleCloudFunctionHandler(req, res) {
                 .fill(0)
                 .map((x, i) => String.fromCharCode(Math.floor(Math.random() * (122 - 48)) + 48))
                 .join("");
-            const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
-            const keys = requestType === BoltGoogleCloudStorageOpsClient_1.RequestType.ListObjects
+            const opsClient = new boltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+            const keys = requestType === boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects
                 ? new Array(10).fill(0).map((x, i) => "dummy key") // For ListObjectsV2, fetching objects process is only repeated for 10 times
-                : [BoltGoogleCloudStorageOpsClient_1.RequestType.UploadObject, BoltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject].includes(requestType)
+                : [boltGoogleCloudStorageOpsClient_1.RequestType.UploadObject, boltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject].includes(requestType)
                     ? new Array(maxKeys)
                         .fill(0)
                         .map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
-                    : ((yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.ListObjects, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.GCS })))["objects"] || []).slice(0, maxKeys); // Fetch keys from buckets (GoogleCloudStorage/Bolt) for GET related performace tests
+                    : ((yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects, sdkType: boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS })))["objects"] || []).slice(0, maxKeys); // Fetch keys from buckets (GoogleCloudStorage/Bolt) for GET related performace tests
             // Run performance stats for given sdkType either GoogleCloudStorage or Bolt
             const runFor = (sdkType) => __awaiter(this, void 0, void 0, function* () {
                 const times = [], throughputs = [], objectSizes = [];
@@ -79,14 +79,14 @@ function googleCloudFunctionHandler(req, res) {
                     const response = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType, isForStats: true, sdkType: sdkType, key, value: generateRandomValue() }));
                     const perfTime = perf.stop().time;
                     times.push(perfTime);
-                    if (requestType === BoltGoogleCloudStorageOpsClient_1.RequestType.ListObjects) {
+                    if (requestType === boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects) {
                         throughputs.push(response.objects.length / perfTime);
                     }
                     else if ([
-                        BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject,
-                        BoltGoogleCloudStorageOpsClient_1.RequestType.GetObjectTTFB,
-                        BoltGoogleCloudStorageOpsClient_1.RequestType.GetObjectPassthrough,
-                        BoltGoogleCloudStorageOpsClient_1.RequestType.GetObjectPassthroughTTFB,
+                        boltGoogleCloudStorageOpsClient_1.RequestType.GetObject,
+                        boltGoogleCloudStorageOpsClient_1.RequestType.GetObjectTTFB,
+                        boltGoogleCloudStorageOpsClient_1.RequestType.GetObjectPassthrough,
+                        boltGoogleCloudStorageOpsClient_1.RequestType.GetObjectPassthroughTTFB,
                     ].includes(requestType)) {
                         if (response.isObjectCompressed) {
                             compressedObjectsCount++;
@@ -104,8 +104,8 @@ function googleCloudFunctionHandler(req, res) {
                     }
                     : {}));
             });
-            const GoogleCloudStoragePerfStats = yield runFor(BoltGoogleCloudStorageOpsClient_1.SdkTypes.GCS);
-            const boltPerfStats = yield runFor(BoltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt);
+            const GoogleCloudStoragePerfStats = yield runFor(boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS);
+            const boltPerfStats = yield runFor(boltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt);
             console.log(`Performance statistics of ${requestType} just got completed.`);
             return {
                 // requestType,
@@ -119,13 +119,13 @@ function googleCloudFunctionHandler(req, res) {
             }
         });
         console.log({ event });
-        const perfStats = event.requestType !== BoltGoogleCloudStorageOpsClient_1.RequestType.All
+        const perfStats = event.requestType !== boltGoogleCloudStorageOpsClient_1.RequestType.All
             ? yield getPerfStats(event.requestType)
             : {
-                [BoltGoogleCloudStorageOpsClient_1.RequestType.UploadObject]: yield getPerfStats(BoltGoogleCloudStorageOpsClient_1.RequestType.UploadObject),
-                [BoltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject]: yield getPerfStats(BoltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject),
-                [BoltGoogleCloudStorageOpsClient_1.RequestType.ListObjects]: yield getPerfStats(BoltGoogleCloudStorageOpsClient_1.RequestType.ListObjects),
-                [BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject]: yield getPerfStats(BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject),
+                [boltGoogleCloudStorageOpsClient_1.RequestType.UploadObject]: yield getPerfStats(boltGoogleCloudStorageOpsClient_1.RequestType.UploadObject),
+                [boltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject]: yield getPerfStats(boltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject),
+                [boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects]: yield getPerfStats(boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects),
+                [boltGoogleCloudStorageOpsClient_1.RequestType.GetObject]: yield getPerfStats(boltGoogleCloudStorageOpsClient_1.RequestType.GetObject),
             };
         res.send(perfStats);
     });
@@ -157,4 +157,4 @@ function computePerfStats(opTimes, tpTimes = [], objSizes = []) {
             ? stats(tpTimes, 5, "objects/ms")
             : `${(opTimes.length / sum(opTimes)).toFixed(5)} objects/ms` }, (objSizes.length > 0 ? { objectSize: stats(objSizes, 2, "bytes") } : {}));
 }
-//# sourceMappingURL=BoltGoogleCloudStoragePerfTestGCF.js.map
+//# sourceMappingURL=boltGoogleCloudStoragePerfTestGCF.js.map

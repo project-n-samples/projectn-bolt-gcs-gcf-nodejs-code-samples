@@ -1,7 +1,7 @@
-import { googleCloudFunctionHandler as boltGoogleCloudStorageOpsClientGCF } from "./BoltGoogleCloudStorageOpsClientGCF";
-import { googleCloudFunctionHandler as boltGoogleCloudStorageValidateObjGCF } from "./BoltGoogleCloudStorageValidateObjGCF";
-import { googleCloudFunctionHandler as boltAutoHealTestGCF } from "./BoltAutoHealTestGCF";
-import { googleCloudFunctionHandler as boltGoogleCloudStoragePerfTestGCF } from "./BoltGoogleCloudStoragePerfTestGCF";
+import { googleCloudFunctionHandler as boltGoogleCloudStorageOpsClientGCF } from "./boltGoogleCloudStorageOpsClientGCF";
+import { googleCloudFunctionHandler as boltGoogleCloudStorageValidateObjGCF } from "./boltGoogleCloudStorageValidateObjGCF";
+import { googleCloudFunctionHandler as boltAutoHealTestGCF } from "./boltAutoHealTestGCF";
+import { googleCloudFunctionHandler as boltGoogleCloudStoragePerfTestGCF } from "./boltGoogleCloudStoragePerfTestGCF";
 
 exports.BoltGoogleCloudStorageOpsClient = boltGoogleCloudStorageOpsClientGCF;
 exports.BoltGoogleCloudStorageValidateObj =

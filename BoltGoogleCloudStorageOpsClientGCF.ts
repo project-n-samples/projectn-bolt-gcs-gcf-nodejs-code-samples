@@ -1,7 +1,7 @@
 import {
   BoltGoogleCloudStorageOpsClient,
   GoogleCloudFunctionEvent,
-} from "./BoltGoogleCloudStorageOpsClient";
+} from "./boltGoogleCloudStorageOpsClient";
 
 // TODO: Update the below code comments
 /**

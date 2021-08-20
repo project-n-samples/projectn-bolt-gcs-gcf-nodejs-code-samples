@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.googleCloudFunctionHandler = void 0;
-const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
+const boltGoogleCloudStorageOpsClient_1 = require("./boltGoogleCloudStorageOpsClient");
 /**
  * <summary>
  * lambdaHandler is the handler function that is invoked by AWS Lambda to process an incoming event for
@@ -28,9 +28,9 @@ const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsCl
 function googleCloudFunctionHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const event = req.body;
-        const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
-        const boltGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
-        const GoogleCloudStorageGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.GCS }));
+        const opsClient = new boltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+        const boltGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: boltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: boltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
+        const GoogleCloudStorageGetObjectResponse = yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: boltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS }));
         res.send({
             "gcs-md5": GoogleCloudStorageGetObjectResponse["md5"],
             "bolt-md5": boltGetObjectResponse["md5"],
@@ -38,4 +38,4 @@ function googleCloudFunctionHandler(req, res) {
     });
 }
 exports.googleCloudFunctionHandler = googleCloudFunctionHandler;
-//# sourceMappingURL=BoltGoogleCloudStorageValidateObjGCF.js.map
+//# sourceMappingURL=boltGoogleCloudStorageValidateObjGCF.js.map

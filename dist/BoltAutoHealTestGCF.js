@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.googleCloudFunctionHandler = void 0;
-const BoltGoogleCloudStorageOpsClient_1 = require("./BoltGoogleCloudStorageOpsClient");
+const boltGoogleCloudStorageOpsClient_1 = require("./boltGoogleCloudStorageOpsClient");
 const perf = require("execution-time")();
 /**
  * <summary>
@@ -33,12 +33,12 @@ function googleCloudFunctionHandler(req, res) {
                 setTimeout(resolve, ms);
             });
         };
-        const opsClient = new BoltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
+        const opsClient = new boltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
         let isObjectHealed = false;
         perf.start();
         while (!isObjectHealed) {
             try {
-                yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: BoltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: BoltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
+                yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: boltGoogleCloudStorageOpsClient_1.RequestType.GetObject, sdkType: boltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt }));
                 isObjectHealed = true;
             }
             catch (ex) {
@@ -56,4 +56,4 @@ function googleCloudFunctionHandler(req, res) {
     });
 }
 exports.googleCloudFunctionHandler = googleCloudFunctionHandler;
-//# sourceMappingURL=BoltAutoHealTestGCF.js.map
+//# sourceMappingURL=boltAutoHealTestGCF.js.map
