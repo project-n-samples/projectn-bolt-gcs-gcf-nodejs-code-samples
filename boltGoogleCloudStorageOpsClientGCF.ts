@@ -1,16 +1,8 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.googleCloudFunctionHandler = void 0;
-const boltGoogleCloudStorageOpsClient_1 = require("./boltGoogleCloudStorageOpsClient_");
+import {
+  BoltGoogleCloudStorageOpsClient,
+  GoogleCloudFunctionEvent,
+} from "./boltGoogleCloudStorageOpsClient";
+
 // TODO: Update the below code comments
 /**
  *lambda_handler is the handler function that is invoked by AWS Lambda to process an incoming event.
@@ -55,13 +47,10 @@ f) Upload object to Bolt:
 g) Delete object from Bolt:
     {"requestType": "delete_object", "sdkType": "BOLT", "bucket": "<bucket>", "key": "<key>"}
 */
-function googleCloudFunctionHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const event = req.body;
-        const opsClient = new boltGoogleCloudStorageOpsClient_1.BoltGoogleCloudStorageOpsClient();
-        const response = yield opsClient.processEvent(event);
-        res.send(response);
-    });
+
+export async function googleCloudFunctionHandler(req, res) {
+  const event: GoogleCloudFunctionEvent = req.body;
+  const opsClient = new BoltGoogleCloudStorageOpsClient();
+  const response = await opsClient.processEvent(event);
+  res.send(response);
 }
-exports.googleCloudFunctionHandler = googleCloudFunctionHandler;
-//# sourceMappingURL=boltGoogleCloudStorageOpsClientGCF_.js.map

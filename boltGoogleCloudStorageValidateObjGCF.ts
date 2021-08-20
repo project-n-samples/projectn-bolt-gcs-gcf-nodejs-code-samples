@@ -3,7 +3,7 @@ import {
   SdkTypes,
   RequestType,
   GoogleCloudFunctionEvent,
-} from "./boltGoogleCloudStorageOpsClient_";
+} from "./boltGoogleCloudStorageOpsClient";
 
 /**
  * <summary>
