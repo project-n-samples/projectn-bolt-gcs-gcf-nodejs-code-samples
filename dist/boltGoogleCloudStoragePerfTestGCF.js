@@ -66,9 +66,7 @@ function googleCloudFunctionHandler(req, res) {
             const keys = requestType === boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects
                 ? new Array(10).fill(0).map((x, i) => "dummy key") // For ListObjectsV2, fetching objects process is only repeated for 10 times
                 : [boltGoogleCloudStorageOpsClient_1.RequestType.UploadObject, boltGoogleCloudStorageOpsClient_1.RequestType.DeleteObject].includes(requestType)
-                    ? new Array(maxKeys)
-                        .fill(0)
-                        .map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
+                    ? new Array(maxKeys).fill(0).map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
                     : ((yield opsClient.processEvent(Object.assign(Object.assign({}, event), { requestType: boltGoogleCloudStorageOpsClient_1.RequestType.ListObjects, sdkType: boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS })))["objects"] || []).slice(0, maxKeys); // Fetch keys from buckets (GoogleCloudStorage/Bolt) for GET related performace tests
             // Run performance stats for given sdkType either GoogleCloudStorage or Bolt
             const runFor = (sdkType) => __awaiter(this, void 0, void 0, function* () {
@@ -104,12 +102,12 @@ function googleCloudFunctionHandler(req, res) {
                     }
                     : {}));
             });
-            const GoogleCloudStoragePerfStats = yield runFor(boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS);
+            const gcsPerfStats = yield runFor(boltGoogleCloudStorageOpsClient_1.SdkTypes.GCS);
             const boltPerfStats = yield runFor(boltGoogleCloudStorageOpsClient_1.SdkTypes.Bolt);
             console.log(`Performance statistics of ${requestType} just got completed.`);
             return {
                 // requestType,
-                GoogleCloudStoragePerfStats,
+                gcsPerfStats,
                 boltPerfStats,
             };
         });

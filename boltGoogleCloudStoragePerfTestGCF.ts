@@ -69,9 +69,7 @@ export async function googleCloudFunctionHandler(req, res) {
         : [RequestType.UploadObject, RequestType.DeleteObject].includes(
             requestType
           )
-        ? new Array(maxKeys)
-            .fill(0)
-            .map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
+        ? new Array(maxKeys).fill(0).map((x, i) => `bolt-gcs-perf-${i}`) // Auto generating keys for PUT or DELETE related performace tests
         : (
             (
               await opsClient.processEvent({
@@ -132,12 +130,12 @@ export async function googleCloudFunctionHandler(req, res) {
           : {}),
       };
     };
-    const GoogleCloudStoragePerfStats = await runFor(SdkTypes.GCS);
+    const gcsPerfStats = await runFor(SdkTypes.GCS);
     const boltPerfStats = await runFor(SdkTypes.Bolt);
     console.log(`Performance statistics of ${requestType} just got completed.`);
     return {
       // requestType,
-      GoogleCloudStoragePerfStats,
+      gcsPerfStats,
       boltPerfStats,
     };
   };
