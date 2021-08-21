@@ -124,6 +124,7 @@ export class BoltGoogleCloudStorageOpsClient
       switch (event.requestType) {
         case RequestType.ListObjects:
           return this.listObjects(client, event.bucket);
+        case RequestType.DownloadObject:
         case RequestType.GetObject:
         case RequestType.GetObjectTTFB:
         case RequestType.GetObjectPassthrough:
@@ -153,8 +154,6 @@ export class BoltGoogleCloudStorageOpsClient
             event.key,
             event.value
           );
-        case RequestType.DownloadObject:
-          return this.downloadObject(client, event.bucket, event.key);
         case RequestType.DeleteObject:
           return this.deleteObject(client, event.bucket, event.key);
       }
