@@ -107,8 +107,8 @@ passed in as input.
     * requestType - type of request / operation to be performed. The following requests are supported:
         * list_objects - list objects
         * list_buckets - list buckets
-        * get_object_md - head object
-        * get_bucket_md - head bucket
+        * get_object_metadata - head object
+        * get_bucket_metadata - head bucket
         * download_object - get object (md5 hash)
         * upload_object - upload object
         * delete_object - delete object
@@ -127,13 +127,13 @@ passed in as input.
       ```json
       {"requestType": "list_buckets", "sdkType": "GCS"}
       ```
-    * Get Bolt object metadata (GET_OBJECT_MD):
+    * Get Bolt object metadata (GET_OBJECT_METADATA):
       ```json
-      {"requestType": "get_object_md", "sdkType": "BOLT", "bucket": "<bucket>", "key": "<key>"}
+      {"requestType": "get_object_metadata", "sdkType": "BOLT", "bucket": "<bucket>", "key": "<key>"}
       ```
-    * Check if GCS bucket exists (GET_BUCKET_MD):
+    * Check if GCS bucket exists (GET_BUCKET_METADATA):
       ```json
-      {"requestType": "get_bucket_md","sdkType": "GCS", "bucket": "<bucket>"}
+      {"requestType": "get_bucket_metadata","sdkType": "GCS", "bucket": "<bucket>"}
       ```  
     * Download object (its MD5 Hash) from Bolt:
       ```json
