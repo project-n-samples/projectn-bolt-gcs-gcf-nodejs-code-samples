@@ -61,7 +61,7 @@ class BoltGoogleCloudStorageOpsClient {
                 //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'
                 switch (event.requestType) {
                     case RequestType.ListObjects:
-                        return this.listObjects(client, event.bucket);
+                        return this.listObjects(client, event.bucket, event.maxKeys ? parseInt(event.maxKeys) : 1000);
                     case RequestType.DownloadObject:
                     case RequestType.GetObject:
                     case RequestType.GetObjectTTFB:
@@ -99,7 +99,12 @@ class BoltGoogleCloudStorageOpsClient {
      */
     listObjects(client, bucket, maxKeys = 1000) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [files] = (yield client.bucket(bucket).getFiles()) || [[]];
+            if (maxKeys > 1000) {
+                maxKeys = 1000;
+            }
+            const [files] = (yield client
+                .bucket(bucket)
+                .getFiles({ maxResults: maxKeys })) || [[]];
             return { objects: files.map((x) => x.name) };
         });
     }

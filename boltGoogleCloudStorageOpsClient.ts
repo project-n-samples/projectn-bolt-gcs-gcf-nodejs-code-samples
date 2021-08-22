@@ -123,7 +123,11 @@ export class BoltGoogleCloudStorageOpsClient
 
       switch (event.requestType) {
         case RequestType.ListObjects:
-          return this.listObjects(client, event.bucket);
+          return this.listObjects(
+            client,
+            event.bucket,
+            event.maxKeys ? parseInt(event.maxKeys as string) : 1000
+          );
         case RequestType.DownloadObject:
         case RequestType.GetObject:
         case RequestType.GetObjectTTFB:
@@ -174,7 +178,12 @@ export class BoltGoogleCloudStorageOpsClient
     bucket: string,
     maxKeys: number = 1000
   ): Promise<ListObjectsResponse> {
-    const [files] = (await client.bucket(bucket).getFiles()) || [[]];
+    if (maxKeys > 1000) {
+      maxKeys = 1000;
+    }
+    const [files] = (await client
+      .bucket(bucket)
+      .getFiles({ maxResults: maxKeys })) || [[]];
     return { objects: files.map((x) => x.name) };
   }
 
