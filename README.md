@@ -20,7 +20,7 @@ cd projectn-bolt-gcs-gcf-nodejs-code-samples
 ### Deploy
 
 This repository contians mainly four GCFs, and client operations which covers to perform basic operations on GCS and Bolt API.
-  - boltGoogleCloudStorageOpsClient.ts - Client operations
+  - boltGoogleCloudStorageOpsClient.ts - GCS/BOLT client operations
   - boltGoogleCloudStorageOpsClientGCF.ts - GCF
   - boltGoogleCloudStorageValidateObjGCF.ts - GCF
   - boltGoogleCloudStoragePerfTestGCF.ts - GCF
