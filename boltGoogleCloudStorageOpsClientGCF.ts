@@ -4,9 +4,10 @@ import {
 } from "./boltGoogleCloudStorageOpsClient";
 
 /**
- *lambda_handler is the handler function that is invoked by AWS Lambda to process an incoming event.
+googleCloudFunctionHandler is the entry function that is invoked by GCF to process an incoming event.
 
-lambda_handler accepts the following input parameters as part of the event:
+googleCloudFunctionHandler accepts the following input parameters as part of the event:
+
 1) sdkType - Endpoint to which request is sent. The following values are supported:
     GoogleCloudStorage - The Request is sent to GoogleCloudStorage.
     Bolt - The Request is sent to Bolt, whose endpoint is configured via 'BOLT_URL' environment variable
