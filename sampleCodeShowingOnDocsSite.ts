@@ -1,11 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import { Readable } from "stream";
 
-const client = new Storage({
-  apiEndpoint: "https://bolt.us-central1.longrunninggcp.bolt.projectn.co",
-});
-
-export async function listObjects(bucketName: string) {
+export async function listObjects(client, bucketName: string) {
   // Lists objects in the bucket
   const [objects] = await client.bucket(bucketName).getFiles();
 
@@ -15,6 +11,15 @@ export async function listObjects(bucketName: string) {
   });
 }
 
+/**
+ * Sample code to test inline writes
+ * @param client
+ * @param bucket
+ * @param key
+ * @param value
+ * @param isForBoltClient
+ * @returns
+ */
 export async function uploadObject(
   client,
   bucket: string,
@@ -56,7 +61,3 @@ export async function uploadObject(
     md5Hash: objectMetadata.md5Hash,
   };
 }
-
-// listObjects("bucket name").catch(console.error); // Can be called from other place index.ts
-
-// uploadObject(client, "bucket name", "object key", "text content to upload"); // Can be called from other place index.ts
