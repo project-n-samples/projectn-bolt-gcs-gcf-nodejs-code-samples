@@ -172,8 +172,94 @@ If the object is gzip encoded, object is decompressed before computing its MD5.
       {"bucket": "<bucket>", "key": "<key>"}
       ```
 
+#### Performance Tests
+
+`BoltGcsPerfTest` is the function that enables the user to run Bolt or GCS Performance tests. It measures the 
+performance of Bolt or GCS Operations and returns statistics based on the operation. Before using this
+handler, ensure that a source bucket has been crunched by `Bolt` with cleaner turned `OFF`. `Get, List Objects` tests
+are run using the first 1000 objects in the bucket and `Put Object` tests are run using objects of size `100 bytes`.
+`Delete Object` tests are run on objects that were created by the `Put Object` test.
+
+* `BoltGcsPerfTest` represents a GCF that is invoked by an HTTP Request for performing
+  Bolt / GCS Performance testing. To use this Function, change the entry point to `boltGcsPerfTestGcfEntry`.
+  
+
+* `BoltGcsPerfTest` accepts the following input parameters as part of the HTTP Request:
+  * requestType - type of request / operation to be performed. The following requests are supported:
+    * list_objects - list objects
+    * get_object - download object
+    * get_object_ttfb - download object (first byte) 
+    * get_object_passthrough - download object (via passthrough) of unmonitored bucket
+    * get_object_passthrough_ttfb - download object (first byte via passthrough) of unmonitored bucket 
+    * upload_object - upload object
+    * delete_object - delete object
+    * all - upload, download, delete, list objects (default request if none specified)
+      
+  * bucket - bucket name
+    
+
+* Following are examples of various HTTP requests, that can be used to invoke the function.
+    * Measure List objects performance of Bolt / GCS.
+      ```json
+      {"requestType": "list_objects", "bucket": "<bucket>"}
+      ```
+    * Measure Download object performance of Bolt / GCS.
+      ```json
+      {"requestType": "get_object", "bucket": "<bucket>"}
+      ```
+    * Measure Download object (first byte) performance of Bolt / GCS.
+      ```json
+      {"requestType": "get_object_ttfb", "bucket": "<bucket>"} 
+      ```
+    * Measure Download object passthrough performance of Bolt.
+      ```json
+      {"requestType": "get_object_passthrough", "bucket": "<unmonitored-bucket>"}
+      ```
+    * Measure Download object passthrough (first byte) performance of Bolt.
+      ```json
+      {"requestType": "get_object_passthrough_ttfb", "bucket": "<unmonitored-bucket>"}
+      ```
+    * Measure Upload object performance of Bolt / GCS.
+      ```json
+      {"requestType": "upload_object", "bucket": "<bucket>"}
+      ```
+    * Measure Delete object performance of Bolt / GCS.
+      ```json
+      {"requestType": "delete_object", "bucket": "<bucket>"}
+      ```
+    * Measure Upload, Delete, Download, List objects performance of Bolt / GCS.
+      ```json
+      {"requestType": "all", "bucket": "<bucket>"}
+      ```
+      
+
+#### Auto Heal Tests
+
+`BoltAutoHealTest` is the function that enables the user to run auto heal tests. Before running this function,
+modify `data-cruncher` to use `coldline` tier-class and set `backupduration` and `recoveryscannerperiod` to `1 minute` 
+to ensure that the auto-healing duration is within the function execution timeout interval. Crunch a sample bucket
+having a single object. Then delete the single fragment object from the `n-data` bucket. Now run this function,
+passing the name of the crunched bucket along with the single object as input parameters to the function. The handler
+attempts to retrieve object repeatedly until it succeeds, which would indicate successful auto-healing of the object
+and returns the time taken to do so.
+
+* `BoltAutoHealTest` represents a GCF that is invoked by an HTTP Request for performing
+  Auto-Heal testing. To use this Function, change the entry point to `boltAutoHealTestGcfEntry`.
+  
+
+* BoltAutoHealHandler accepts the following input parameters as part of the event:
+  * bucket - bucket name
+    
+  * key - key name
+    
+
+* Following is an example of a HTTP Request that can be used to invoke the function.
+    * Measure Auto-Heal time of an object in Bolt.
+      ```json
+      {"bucket": "<bucket>", "key": "<key>"}
+      ```
+
 ### Getting Help
 
 For additional assistance, please refer to [Project N Docs](https://xyz.projectn.co/) or contact us directly
 [here](mailto:support@projectn.co)
-
