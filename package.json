@@ -13,7 +13,7 @@
     "gcfs-compile": "tsc && node dist/index.js",
     "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run gcfs-compile\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docs-sample-compile": "tsc && node dist/runSampleCodeShowingOnDocs.js",
+    "docs-sample-compile": "tsc && node dist/sampleCodeShowingOnDocsSite.js",
     "run-docs-sample": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run docs-sample-compile\""
   },
   "author": "Project N",

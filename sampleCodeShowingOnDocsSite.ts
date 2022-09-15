@@ -1,9 +1,9 @@
 import { Storage } from "@google-cloud/storage";
 import { Readable } from "stream";
 
-export async function listObjects(client, bucketName: string) {
-  // Lists objects in the bucket
-  const [objects] = await client.bucket(bucketName).getFiles();
+// Lists objects in a bucket
+async function listObjects(client, bucket: string) {
+  const [objects] = await client.bucket(bucket).getFiles();
 
   console.log("Objects:");
   objects.forEach((object) => {
@@ -11,21 +11,12 @@ export async function listObjects(client, bucketName: string) {
   });
 }
 
-/**
- * Sample code to test inline writes
- * @param client
- * @param bucket
- * @param key
- * @param value
- * @param isForBoltClient
- * @returns
- */
-export async function uploadObject(
+// Write object to a bucket
+async function uploadObject(
   client,
   bucket: string,
   key: string,
-  value: string,
-  isForBoltClient: boolean = true
+  value: string
 ) {
   const file = await client.bucket(bucket).file(key);
   await new Promise((resolve, reject) => {
@@ -39,12 +30,7 @@ export async function uploadObject(
           },
         })
         .on("error", async (error) => {
-          if (isForBoltClient) {
-            const gsClient = new Storage();
-            resolve(await uploadObject(gsClient, bucket, key, value, false));
-          } else {
-            reject(error);
-          }
+          reject(error);
         })
         .on("finish", () => {
           resolve(true);
@@ -61,3 +47,23 @@ export async function uploadObject(
     md5Hash: objectMetadata.md5Hash,
   };
 }
+
+/**
+ * To test inline object writes
+ */
+export async function runSampleCode() {
+  const client = new Storage({
+    apiEndpoint: process.env.BOLT_URL,
+  });
+
+  await uploadObject(
+    client,
+    "bucket name",
+    "object key",
+    "text content to upload"
+  );
+
+  await listObjects(client, "bucket name");
+}
+
+runSampleCode();

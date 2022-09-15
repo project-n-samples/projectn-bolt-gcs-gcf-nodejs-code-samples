@@ -9,30 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadObject = exports.listObjects = void 0;
+exports.runSampleCode = void 0;
 const storage_1 = require("@google-cloud/storage");
 const stream_1 = require("stream");
-function listObjects(client, bucketName) {
+// Lists objects in a bucket
+function listObjects(client, bucket) {
     return __awaiter(this, void 0, void 0, function* () {
-        // Lists objects in the bucket
-        const [objects] = yield client.bucket(bucketName).getFiles();
+        const [objects] = yield client.bucket(bucket).getFiles();
         console.log("Objects:");
         objects.forEach((object) => {
             console.log(object.name);
         });
     });
 }
-exports.listObjects = listObjects;
-/**
- * Sample code to test inline writes
- * @param client
- * @param bucket
- * @param key
- * @param value
- * @param isForBoltClient
- * @returns
- */
-function uploadObject(client, bucket, key, value, isForBoltClient = true) {
+// Write object to a bucket
+function uploadObject(client, bucket, key, value) {
     return __awaiter(this, void 0, void 0, function* () {
         const file = yield client.bucket(bucket).file(key);
         yield new Promise((resolve, reject) => {
@@ -45,13 +36,7 @@ function uploadObject(client, bucket, key, value, isForBoltClient = true) {
                 },
             })
                 .on("error", (error) => __awaiter(this, void 0, void 0, function* () {
-                if (isForBoltClient) {
-                    const gsClient = new storage_1.Storage();
-                    resolve(yield uploadObject(gsClient, bucket, key, value, false));
-                }
-                else {
-                    reject(error);
-                }
+                reject(error);
             }))
                 .on("finish", () => {
                 resolve(true);
@@ -67,5 +52,18 @@ function uploadObject(client, bucket, key, value, isForBoltClient = true) {
         };
     });
 }
-exports.uploadObject = uploadObject;
+/**
+ * To test inline object writes
+ */
+function runSampleCode() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const client = new storage_1.Storage({
+            apiEndpoint: process.env.BOLT_URL,
+        });
+        yield uploadObject(client, "bucket name", "object key", "text content to upload");
+        yield listObjects(client, "bucket name");
+    });
+}
+exports.runSampleCode = runSampleCode;
+runSampleCode();
 //# sourceMappingURL=sampleCodeShowingOnDocsSite.js.map
