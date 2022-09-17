@@ -1,20 +1,10 @@
 import { Storage } from "@google-cloud/storage";
 import { Readable } from "stream";
 
-/**
- * Lists objects in a bucket
- */
-async function listObjects(client, bucket: string) {
-  const [objects] = await client.bucket(bucket).getFiles();
-
-  console.log("Objects:");
-  objects.forEach((object) => {
-    console.log(object.name);
-  });
-}
+runSampleCode();
 
 /**
- * To test inline object writes
+ * Test object writes, and listing of bucket objects
  */
 async function runSampleCode() {
   const client = new Storage({ apiEndpoint: process.env.BOLT_URL });
@@ -22,28 +12,27 @@ async function runSampleCode() {
   await uploadObject(
     client,
     "bucket name",
-    "object key",
-    "text content to upload"
+    "object key (ex: sample.txt)",
+    "text content to upload to the object"
   );
 
   await listObjects(client, "bucket name");
 }
 
-runSampleCode();
-
 /**
- * Write object to a bucket
+ * Uploads a text object to a bucket
  */
 async function uploadObject(
   client,
-  bucket: string,
-  key: string,
-  value: string
+  bucketName: string,
+  objectKey: string,
+  textContent: string,
+  targetBolt: boolean = true
 ) {
-  const file = await client.bucket(bucket).file(key);
+  const file = await client.bucket(bucketName).file(objectKey);
 
   return new Promise((resolve, reject) => {
-    Readable.from(value).pipe(
+    Readable.from(textContent).pipe(
       file
         .createWriteStream({
           resumable: false,
@@ -53,11 +42,36 @@ async function uploadObject(
           },
         })
         .on("error", async (error) => {
-          reject(error);
+          if (targetBolt) {
+            const gsClient = new Storage();
+            resolve(
+              await uploadObject(
+                gsClient,
+                bucketName,
+                objectKey,
+                textContent,
+                false
+              )
+            );
+          } else {
+            reject(error);
+          }
         })
         .on("finish", () => {
           resolve(true);
         })
     );
+  });
+}
+
+/**
+ * Lists objects in a bucket
+ */
+async function listObjects(client, bucketName: string) {
+  const [objects] = await client.bucket(bucketName).getFiles();
+
+  console.log("Objects:");
+  objects.forEach((object) => {
+    console.log(object.name);
   });
 }

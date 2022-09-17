@@ -344,7 +344,8 @@ export class BoltGoogleCloudStorageOpsClient
     client: Storage,
     bucket: string,
     key: string,
-    value: string
+    value: string,
+    targetBolt: boolean = true
   ): Promise<UploadObjectResponse> {
     const file = await client.bucket(bucket).file(key);
     await new Promise((resolve, reject) => {
@@ -357,8 +358,15 @@ export class BoltGoogleCloudStorageOpsClient
               contentType: "text/json",
             },
           })
-          .on("error", (error) => {
-            reject(error);
+          .on("error", async (error) => {
+            if (targetBolt) {
+              const gsClient = new Storage();
+              resolve(
+                await this.uploadObject(gsClient, bucket, key, value, false)
+              );
+            } else {
+              reject(error);
+            }
           })
           .on("finish", () => {
             resolve(true);

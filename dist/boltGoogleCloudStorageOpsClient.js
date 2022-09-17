@@ -248,7 +248,7 @@ class BoltGoogleCloudStorageOpsClient {
      * @param value
      * @returns object metadata
      */
-    uploadObject(client, bucket, key, value) {
+    uploadObject(client, bucket, key, value, targetBolt = true) {
         return __awaiter(this, void 0, void 0, function* () {
             const file = yield client.bucket(bucket).file(key);
             yield new Promise((resolve, reject) => {
@@ -260,9 +260,15 @@ class BoltGoogleCloudStorageOpsClient {
                         contentType: "text/json",
                     },
                 })
-                    .on("error", (error) => {
-                    reject(error);
-                })
+                    .on("error", (error) => __awaiter(this, void 0, void 0, function* () {
+                    if (targetBolt) {
+                        const gsClient = new storage_1.Storage();
+                        resolve(yield this.uploadObject(gsClient, bucket, key, value, false));
+                    }
+                    else {
+                        reject(error);
+                    }
+                }))
                     .on("finish", () => {
                     resolve(true);
                 }));
