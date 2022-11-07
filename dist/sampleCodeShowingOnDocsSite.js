@@ -17,7 +17,10 @@ runSampleCode();
  */
 function runSampleCode() {
     return __awaiter(this, void 0, void 0, function* () {
-        const client = new storage_1.Storage({ apiEndpoint: process.env.BOLT_URL });
+        const client = new storage_1.Storage({
+            apiEndpoint: process.env.BOLT_URL,
+            useAuthWithCustomEndpoint: true,
+        });
         yield uploadObject(client, "bucket name", "object key (ex: sample.txt)", "text content to upload to the object");
         yield listObjects(client, "bucket name");
     });

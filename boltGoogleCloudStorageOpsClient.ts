@@ -116,7 +116,10 @@ export class BoltGoogleCloudStorageOpsClient
     const region = await getBoltRegion();
     const client =
       event.sdkType === SdkTypes.Bolt
-        ? new Storage({ apiEndpoint: getBoltURL(region).toString() })
+        ? new Storage({
+            apiEndpoint: getBoltURL(region).toString(),
+            useAuthWithCustomEndpoint: true,
+          })
         : new Storage();
     try {
       //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'

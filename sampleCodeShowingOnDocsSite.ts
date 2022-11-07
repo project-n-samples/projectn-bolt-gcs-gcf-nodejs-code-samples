@@ -7,7 +7,10 @@ runSampleCode();
  * Test object writes, and listing of bucket objects
  */
 async function runSampleCode() {
-  const client = new Storage({ apiEndpoint: process.env.BOLT_URL });
+  const client = new Storage({
+    apiEndpoint: process.env.BOLT_URL,
+    useAuthWithCustomEndpoint: true,
+  });
 
   await uploadObject(
     client,
