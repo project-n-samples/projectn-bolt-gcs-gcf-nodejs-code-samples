@@ -55,7 +55,10 @@ class BoltGoogleCloudStorageOpsClient {
              */
             const region = yield (0, common_1.getBoltRegion)();
             const client = event.sdkType === SdkTypes.Bolt
-                ? new storage_1.Storage({ apiEndpoint: (0, common_1.getBoltURL)(region).toString() })
+                ? new storage_1.Storage({
+                    apiEndpoint: (0, common_1.getBoltURL)(region).toString(),
+                    useAuthWithCustomEndpoint: true,
+                })
                 : new storage_1.Storage();
             try {
                 //Performs an GoogleCloudStorage / Bolt operation based on the input 'requestType'
