@@ -118,7 +118,7 @@ export class BoltGoogleCloudStorageOpsClient
       event.sdkType === SdkTypes.Bolt
         ? new Storage({
             apiEndpoint: getBoltURL(region).toString(),
-            useAuthWithCustomEndpoint: true,
+            useAuthWithCustomEndpoint: true, // This mandatory flag works only with the latest versions, recommend the latest "@google-cloud/storage": "^6.7.0"
           })
         : new Storage();
     try {
