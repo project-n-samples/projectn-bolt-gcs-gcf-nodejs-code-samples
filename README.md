@@ -6,7 +6,7 @@ Sample Node.js GoogleCloudFunctions (GCFs) that utilizes GoogleCloudStorage (GCS
 ### Requirements
 
 - Node.js 14 or later
-- @google-cloud/storage 6.7.0 or later
+- @google-cloud/storage 5.15.0 or later
 
 ### Build from source
 

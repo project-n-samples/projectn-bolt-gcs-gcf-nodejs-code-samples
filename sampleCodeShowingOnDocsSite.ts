@@ -9,7 +9,7 @@ runSampleCode();
 async function runSampleCode() {
   const client = new Storage({
     apiEndpoint: process.env.BOLT_URL,
-    useAuthWithCustomEndpoint: true, // This mandatory flag works only with the latest versions, recommend the latest "@google-cloud/storage": "^6.7.0"
+    useAuthWithCustomEndpoint: true, // This flag needs to be set if @google-cloud/storage version is >= 5.15.0
   });
 
   await uploadObject(
